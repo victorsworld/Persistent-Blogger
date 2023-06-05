@@ -27,15 +27,25 @@ const newBlog = async (req, res) => {
 
 const getBlog = async (req, res) => {
   try {
-    const find = req.params.id;
-    const findID = await Blogger.findOne({ _id: find });
+    const findID = await Blogger.findOne({ _id: req.params.id });
     if (!findID) {
       return res
         .status(400)
         .json({ success: false, message: 'Blog not found' });
     }
     res.status(200).json({ success: true, data: findID });
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
 };
 
-module.exports = { getAllBloggs, newBlog, getBlog };
+const updateBlog = async (req,res) => {
+    try {
+        const update = await Blogger.updateOne({ _id: req.params.id}, req.body)
+        if(!update) return res.status(400).json({success: false, message: "user not found"})
+          res.status(200).json({success: true, data: update});
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+module.exports = { getAllBloggs, newBlog, getBlog, updateBlog };
