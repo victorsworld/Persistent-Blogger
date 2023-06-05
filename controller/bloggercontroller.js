@@ -39,13 +39,29 @@ const getBlog = async (req, res) => {
   }
 };
 
-const updateBlog = async (req,res) => {
-    try {
-        const update = await Blogger.updateOne({ _id: req.params.id}, req.body)
-        if(!update) return res.status(400).json({success: false, message: "user not found"})
-          res.status(200).json({success: true, data: update});
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
-}
-module.exports = { getAllBloggs, newBlog, getBlog, updateBlog };
+const updateBlog = async (req, res) => {
+  try {
+    const update = await Blogger.updateOne({ _id: req.params.id }, req.body);
+    if (!update)
+      return res
+        .status(400)
+        .json({ success: false, message: 'Blog not found' });
+    res.status(200).json({ success: true, data: update });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const deleteBlog = async (req, res) => {
+  try {
+    const deleteBlog = await Blogger.deleteOne({ _id: req.params.id });
+    if (!deleteBlog)
+      return res
+        .status(400)
+        .json({ success: false, message: 'Blog not found' });
+    res.status(200).json({ success: true, data: deleteBlog });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+module.exports = { getAllBloggs, newBlog, getBlog, updateBlog, deleteBlog };
